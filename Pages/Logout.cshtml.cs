@@ -5,8 +5,11 @@ namespace NHLCafe.Pages
 {
     public class LogoutModel : PageModel
     {
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("session");
+            return RedirectToPage("/Login");
         }
     }
 }

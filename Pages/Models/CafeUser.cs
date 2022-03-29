@@ -8,5 +8,4 @@ public class CafeUser
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
     }

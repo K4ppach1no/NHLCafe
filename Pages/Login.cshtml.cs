@@ -10,27 +10,37 @@ namespace NHLCafe.Pages
     {
         [Required] [BindProperty] public string UserName { get; set; } = string.Empty;
         [Required] [BindProperty] public string Password { get; set; } = string.Empty;
-
         public string Msg { get; set; } = string.Empty;
-
-        public const string SessionKeyId = "_Id";
-
-        public void OnGet()
+        
+        public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("session") != null)
+                return RedirectToPage("/Auth/AccountOverview");
+            return Page();
         }
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
-                return Page();
-
-            CafeUser SessionKeyUser = StaticUserRepository.GetUser(UserName, Password);
-            if (SessionKeyUser.UniqueGuid.ToString() != null)
+            var user = new UserRepository();
+            if (ModelState.IsValid)
             {
-                HttpContext.Session.SetString(SessionKeyId, SessionKeyUser.UniqueGuid.ToString());
-                return RedirectToPage("AccountOverview");
+                var res = user.Auth(UserName, Password).ToList();
+                if (res[0].auth)
+                {
+                    HttpContext.Session.SetInt32("session", res[0].userid);
+                    return RedirectToPage("/Auth/AccountOverview");
+                }
+                else
+                {
+                    Msg = "Invalid Credentials";
+                    return Page();
+                }
             }
-            return Page();
+            else
+            {
+                Msg = "Wrong username or password";
+                return Page();
+            }
         }
     }
 }
