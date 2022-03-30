@@ -26,7 +26,7 @@ public class ProductRepository
     }
 
     // get product by id
-    public Product GetById(int id)
+    public Product? GetById(int id)
     {
         using (IDbConnection dbConnection = Connect())
         {
@@ -41,7 +41,7 @@ public class ProductRepository
         using (IDbConnection dbConnection = Connect())
         {
             string sQuery = "INSERT INTO products (Name, Price, Description, Image, Category) VALUES(@Name, @Price, @Description, @Image, @Category)";
-            dbConnection.Execute(sQuery, product);
+            dbConnection.Execute(sQuery, new {  Name = product.Name, Price = product.Price, Description = product.Description, Image = product.Image, Category = product.Category });
         }
     }
 

@@ -18,7 +18,7 @@ public class CategoryRepository
         );
     }
     // get all categories in a list
-    public List<Category> GetAll()
+    public List<Category>? GetAll()
     {
         using (IDbConnection dbConnection = Connect())
         {
