@@ -12,7 +12,7 @@ public class ProductRepository
     {
         return new MySqlConnection(
             "Server=127.0.0.1;Port=3306;" +
-            "Database=nhlcafe;" +
+            "Database=exercises;" +
             "Uid=root;Pwd=;"
         );
     }    
@@ -21,17 +21,17 @@ public class ProductRepository
     {
         using (IDbConnection dbConnection = Connect())
         {
-            return dbConnection.Query<Product>("SELECT * FROM products").ToList();
+            return dbConnection.Query<Product>("SELECT * FROM product").ToList();
         }
     }
 
     // get product by id
-    public Product? GetById(int id)
+    public Product GetById(int ProductId)
     {
         using (IDbConnection dbConnection = Connect())
         {
-            string sQuery = "SELECT * FROM products WHERE Id = @Id";
-            return dbConnection.Query<Product>(sQuery, new { Id = id }).FirstOrDefault();
+            string sQuery = "SELECT * FROM product WHERE ProductId = @ProductId"; 
+            return dbConnection.Query<Product>(sQuery, new { ProductId }).FirstOrDefault();
         }
     }
     
@@ -40,8 +40,8 @@ public class ProductRepository
     {
         using (IDbConnection dbConnection = Connect())
         {
-            string sQuery = "INSERT INTO products (Name, Price, Description, Image, Category) VALUES(@Name, @Price, @Description, @Image, @Category)";
-            dbConnection.Execute(sQuery, new {  Name = product.Name, Price = product.Price, Description = product.Description, Image = product.Image, Category = product.Category });
+            string sQuery = "INSERT INTO product (Name, CategoryId, Price) VALUES(@Name, @CategoryId, @Price)";
+            dbConnection.Execute(sQuery, product);
         }
     }
 
@@ -50,28 +50,28 @@ public class ProductRepository
     {
         using (IDbConnection dbConnection = Connect())
         {
-            string sQuery = "UPDATE products SET Name = @Name, Price = @Price, Description = @Description, Image = @Image WHERE Id = @Id";
+            string sQuery = "UPDATE product SET Name = @Name, CategoryId = @CategoryId, Price = @Price WHERE ProductId = @ProductId";
             dbConnection.Execute(sQuery, product);
         }
     }
     
     // delete product
-    public void Delete(int id)
+    public void Delete(int ProductId)
     {
         using (IDbConnection dbConnection = Connect())
         {
-            string sQuery = "DELETE FROM products WHERE Id = @Id";
-            dbConnection.Execute(sQuery, new { Id = id });
+            string sQuery = "DELETE FROM product WHERE ProductId = @ProductId";
+            dbConnection.Execute(sQuery, new { ProductId });
         }
     }
     
     // get all products by category
-    public List<Product> GetByCategory(int categoryId)
+    public List<Product> GetByCategory(int CategoryId)
     {
         using (IDbConnection dbConnection = Connect())
         {
-            string sQuery = "SELECT * FROM products WHERE CategoryId = @CategoryId";
-            return dbConnection.Query<Product>(sQuery, new { CategoryId = categoryId }).ToList();
+            string sQuery = "SELECT * FROM product WHERE CategoryId = @CategoryId";
+            return dbConnection.Query<Product>(sQuery, new { CategoryId }).ToList();
         }
     }
 }

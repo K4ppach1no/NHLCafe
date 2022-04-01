@@ -13,18 +13,16 @@ public class CategoryRepository
     {
         return new MySqlConnection(
             "Server=127.0.0.1;Port=3306;" +
-            "Database=nhlcafe;" +
+            "Database=exercises;" +
             "Uid=root;Pwd=;"
         );
     }
     // get all categories in a list
-    public List<Category>? GetAll()
+    public List<Category> GetAll()
     {
         using (IDbConnection dbConnection = Connect())
         {
-            string sQuery = "SELECT * FROM categories";
-            dbConnection.Open();
-            return dbConnection.Query<Category>(sQuery).ToList();
+            return dbConnection.Query<Category>("SELECT * FROM category").ToList();
         }
     }
     
@@ -33,9 +31,8 @@ public class CategoryRepository
     {
         using (IDbConnection dbConnection = Connect())
         {
-            string sQuery = "INSERT INTO categories (category_name) VALUES (@CategoryName)";
-            dbConnection.Open();
-            dbConnection.Execute(sQuery, category);
+            string query = "INSERT INTO category (Name) VALUES (@Name)";
+            dbConnection.Execute(query, category);
         }
     }
 
