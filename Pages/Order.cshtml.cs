@@ -11,6 +11,7 @@ namespace NHLCafe.Pages
         public List<Category>? Categories { get; set; }
         public List<Product>? Products { get; set; }
         public List<Item>? Cart { get; set; }
+        public List<Item>? PerPersoonBetalen { get; set; }
         public double Total { get; set; }
         
         [BindProperty] public int ProductId { get; set; }
@@ -42,66 +43,76 @@ namespace NHLCafe.Pages
             Products = prod.GetAll();
             Categories = cat.GetAll();
         }
+        
+        public IActionResult OnPostPerPersoonBetalen(int productId, string action)
+        {
+            Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") ?? new List<Item>();
+            PerPersoonBetalen = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "perpersoonbetalen") ?? new List<Item>();
+            var prod = new ProductRepository();
+            var cat = new CategoryRepository();
+            Categories = cat.GetAll();
+            Products = prod.GetAll();
+            
+            switch (action)
+            {
+                case "Add":
+                    // Add the product to the cart
+                    if (PerPersoonBetalen.Exists(x => x.Product.ProductId == productId))
+                    {
+                        var availableQuantity = Cart.FirstOrDefault(x => x.Product.ProductId == productId).Quantity;
+                        var item = PerPersoonBetalen.FirstOrDefault(x => x.Product.ProductId == productId);
+                        if (item.Quantity < availableQuantity)
+                            item.Quantity++;
+                    }
+                    else
+                    {
+                        PerPersoonBetalen.Add(new Item(prod.GetById(productId), 1));
+                    }
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "perpersoonbetalen", PerPersoonBetalen);
+                    break;
+                case "Remove":
+                    // Remove the product from the cart
+                    if (PerPersoonBetalen.Exists(x => x.Product.ProductId == productId))
+                    {
+                        var item = PerPersoonBetalen.FirstOrDefault(x => x.Product.ProductId == productId);
+                        item.Quantity -= 1;
+                        if (item.Quantity <= 0)
+                        {
+                            PerPersoonBetalen.Remove(item);
+                        }
+                    }
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "perpersoonbetalen", PerPersoonBetalen);
+                    break;
+                case "Pay":
+                    foreach (var item in PerPersoonBetalen)
+                    {
+                        Cart.FirstOrDefault(x => x.Product.ProductId == item.Product.ProductId).Quantity -= item.Quantity;
+                        if (Cart.FirstOrDefault(x => x.Product.ProductId == item.Product.ProductId).Quantity <= 0)
+                        {
+                            Cart.Remove(Cart.FirstOrDefault(x => x.Product.ProductId == item.Product.ProductId));
+                        }
+                    }
+                    
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
+                    PerPersoonBetalen.Clear();
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "perpersoonbetalen", PerPersoonBetalen);
+                    break;
+            }
+
+
+            return Page();
+        }
 
         public void OnPostBuy([FromForm] int productId)
         {
-            // create a new instance of the repository
-            var cat = new CategoryRepository();
-            // create a new instance of the repository
-            var prod = new ProductRepository();
-
-            //Get the categories from the repository
-            Categories = cat.GetAll();
+            ModifyCart(productId, "add");
             
-            //Get the products from the repository
-            Products = prod.GetAll();
-            
-            Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
-            // check if we have a cart
-            if (Cart == null)
-            {
-                Cart = new List<Item>();
-                Cart.Add(new Item(prod.GetById(productId), 1));
-                
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
-                
-                CalculateTotal();
-            }
-            // if we do we can use it
-            else
-            {
-                int index = Exists(Cart, productId);
-                
-                if (index == -1)
-                    Cart.Add(new Item(prod.GetById(productId), 1));
-                else
-                    Cart[index].Quantity++;
-                
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
-                
-                CalculateTotal();
-            }
+            CalculateTotal();
         }
 
         public IActionResult OnPostMinus([FromForm] int productId)
         {
-            var cat = new CategoryRepository();
-            var prod = new ProductRepository();
-            Categories = cat.GetAll();
-            Products = prod.GetAll();
-            
-            Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
-            int index = Exists(Cart, productId);
-            if (Cart != null && Cart[index].Quantity > 1)
-            {
-                Cart[index].Quantity--;
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
-            }
-            else
-            {
-                Cart?.RemoveAt(index);
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
-            }
+            ModifyCart(productId, "remove");
             
             CalculateTotal();
 
@@ -110,21 +121,7 @@ namespace NHLCafe.Pages
         
         public IActionResult OnPostPlus([FromForm] int productId)
         {
-            var cat = new CategoryRepository();
-            var prod = new ProductRepository();
-            Categories = cat.GetAll();
-            Products = prod.GetAll();
-            
-            Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
-            if (Cart != null)
-            {
-                int index = Exists(Cart, productId);
-                if (index != -1)
-                {
-                    Cart[index].Quantity++;
-                    SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
-                }
-            }
+            ModifyCart(ProductId, "add");
 
             CalculateTotal();
             
@@ -133,19 +130,18 @@ namespace NHLCafe.Pages
         
         public IActionResult OnPostRemove([FromForm] int productId)
         {
-            var cat = new CategoryRepository();
-            var prod = new ProductRepository();
-            Categories = cat.GetAll();
-            Products = prod.GetAll();
-            
-            Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
-            int index = Exists(Cart, productId);
-            if (index != -1 && Cart != null)
-            {
-                Cart.RemoveAt(index);
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
-            }
+            ModifyCart(productId, "remove");
+            CalculateTotal();
 
+            return new RedirectResult("/Order");
+        }
+        
+        public IActionResult OnPostPay([FromForm] int productId)
+        {
+            // Empty the cart
+            Cart = new List<Item>();
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
+            
             CalculateTotal();
 
             return new RedirectResult("/Order");
@@ -167,6 +163,57 @@ namespace NHLCafe.Pages
             return -1;
         }
         
+        private void ModifyCart(int ProductId, string action)
+        {
+            var cat = new CategoryRepository();
+            var prod = new ProductRepository();
+            Categories = cat.GetAll();
+            Products = prod.GetAll();
+            
+            Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            
+            var index = Exists(Cart, ProductId);
+            Cart ??= new List<Item>();
+            
+            switch (action)
+            {
+                case "add":
+                    // Check if the product is already in the cart
+                    if (index == -1)
+                    {
+                        var product = prod.GetById(ProductId);
+                        var item = new Item(product, 1);
+                        Cart.Add(item);
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
+                    }
+                    // If the product is already in the cart, increase the quantity
+                    else
+                    {
+                        Cart[index].Quantity++;
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
+                    }
+                    break;
+                
+                case "remove":
+                    // check if the item is in the cart
+                    if (index == -1) break;
+                    
+                    // check if we have more than one item in the cart
+                    if (Cart[index].Quantity > 1)
+                    {
+                        Cart[index].Quantity--;
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
+                    }
+                    // if we have only one item in the cart, remove it
+                    else
+                    {
+                        Cart.RemoveAt(index);
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", Cart);
+                    }
+                    break;
+            }
+        }
+        
         private void CalculateTotal()
         {
             Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
@@ -177,5 +224,15 @@ namespace NHLCafe.Pages
                 return 0;
             });
         }
+        
+        // Get the quantity of a product in the PerPersoonBetalen
+        public int GetQuantity(int productId)
+        {
+            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "perpersoonbetalen");
+            var index = Exists(cart, productId);
+            if (index == -1) return 0;
+            return cart[index].Quantity;
+        }
+        
     }
 }

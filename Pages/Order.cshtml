@@ -187,46 +187,58 @@
 <div class="tab-pane fade" id="paySolo" role="tabpanel" aria-labelledby="contact-tab">
     <h2>Per persoon betalen</h2>
     <table class="table table-hover table-striped">
-      <thead>
-      <tr>
-        <th scope="col">Product</th>
-        <th scope="col">Nog te betalen</th>
-        <th scope="col">Prijs</th>
-        <th scope="col">Totaal</th>
-      </tr>
-      </thead>
-      <tbody>
-      @if (Model != null && Model.Cart != null)
-      {
-        foreach (var orderItem in Model.Cart)
+        <thead>
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Nog te betalen</th>
+            <th scope="col">Prijs</th>
+            <th scope="col">Totaal</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null && Model.Cart != null)
         {
-          <tr>
-            <td>@orderItem.Product?.Name</td>
-            <td>
-              <form @*method="post" asp-page-handler="minus"*@>
-                <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                <button id="PerPersoonMinus" class="btn badge bg-primary rounded-pill" style="float: left">-</button>
-              </form>
-              <span style="margin-left: 10px; margin-right: 10px; float: left">@orderItem.Quantity</span>
-              <form @*method="post" asp-page-handler="plus"*@>
-                <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                <button id="PerPersoonPlus" class="btn badge bg-primary rounded-pill" style="float: left">+</button>
-              </form>
-              <span style="margin-left: 10px; margin-right: 10px; float: left">van @orderItem.Quantity</span>
-            </td>
-            <td>@($"{orderItem.Product.Price:n2}")</td>
-            <td>@($"{orderItem.Product.Price * @orderItem.Quantity:n2}")</td>
-          </tr>
+            foreach (var orderItem in Model.Cart)
+            {
+                <tr>
+                    <td>@orderItem.Product?.Name</td>
+                    <td>
+                        <form method="post" asp-page-handler="PerpersoonBetalen">
+                            <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+                            <input type="hidden" name="Action" value="Remove"/>
+                            <button id="Remove" class="btn badge bg-primary rounded-pill" style="float: left">-</button>
+                        </form>
+                        <span id="ItemQuantity" style="margin-left: 10px; margin-right: 10px; float: left">@Model.GetQuantity(orderItem.Product.ProductId)</span>
+                        <form method="post" asp-page-handler="PerpersoonBetalen">
+                            <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+                            <input type="hidden" name="Action" value="Add"/>
+                            <button id="Add" class="btn badge bg-primary rounded-pill" style="float: left">+</button>
+                        </form>
+                        <span style="margin-left: 10px; margin-right: 10px; float: left">van @orderItem.Quantity</span>
+                    </td>
+                    <td>@($"{orderItem.Product.Price:n2}")</td>
+                    <td>@($"{orderItem.Product.Price * @orderItem.Quantity:n2}")</td>
+                </tr>
+            }
         }
-      }
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>@($"{Model.Total:n2}")</td>
-      </tr>
-      </tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>@($"{Model.Total:n2}")</td>
+        </tr>
+        </tbody>
     </table>
+    @* Pay button in the bottom right corner *@
+    <div class="row">
+        <div class="col-md-12">
+          <form  method="post" asp-page-handler="PerpersoonBetalen">
+            <input type="hidden" name="ProductID" value="0"/>
+            <input type="hidden" name="Action" value="Pay"/>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Betalen</button>
+          </form>
+        </div>
+    </div>
   </div>
   
   
@@ -234,38 +246,5 @@
 
 <script>
   $(document).ready(function () {
-    // Per persoon betalen plus and minus buttons
-    // $("#PerPersoonPlus").click(function () {
-    //   var productId = $(this).parent().find("input[name='productId']").val();
-    //   var quantity = $(this).parent().parent().find("span").text();
-    //   var total = $(this).parent().parent().parent().find("td:eq(3)").text();
-    //   var totalPrice = $(this).parent().parent().parent().find("td:eq(3)").text();
-    //   var totalPrice = totalPrice.replace(",", ".");
-    //   var totalPrice = parseFloat(totalPrice);
-    //   var totalPrice = totalPrice / quantity;
-    //   var totalPrice = totalPrice.toFixed(2);
-    //   var totalPrice = totalPrice.replace(".", ",");
-    //   var totalPrice = totalPrice.replace(",", ".");
-    //   var totalPrice = parseFloat(totalPrice);
-    //   var totalPrice = totalPrice * (quantity + 1);
-    //   var totalPrice = totalPrice.toFixed(2);
-    //   var totalPrice = totalPrice.replace(".", ",");
-    //   var totalPrice = totalPrice.replace(",", ".");
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/Order?handler=plus",
-    //     data: {
-    //       productId: productId,
-    //       quantity: quantity,
-    //       total: total,
-    //       totalPrice: totalPrice
-    //     },
-    //     success: function (data) {
-    //       $("#PerPersoonPlus").parent().parent().parent().find("td:eq(3)").text(data);
-    //       $("#PerPersoonPlus").parent().parent().parent().find("td:eq(2)").text(totalPrice);
-    //       $("#PerPersoonPlus").parent().parent().parent().find("td:eq(1)").text(quantity + 1);
-    //     }
-    //   });
-    // });
   });
 </script>
