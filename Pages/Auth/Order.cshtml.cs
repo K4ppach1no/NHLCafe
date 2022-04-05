@@ -16,38 +16,28 @@ namespace NHLCafe.Pages
         public List<int> Tafels { get; set; } = new List<int>() {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         
         [BindProperty] public int TableNr { get; set; }
-        
         [BindProperty] public int ProductId { get; set; }
         
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            // create a new instance of the repository
-            var cat = new CategoryRepository();
-            // create a new instance of the repository
-            var prod = new ProductRepository();
+            if (HttpContext.Session.GetString("session") == null)
+                return RedirectToPage("../Login");
             
-                
             //Get the categories from the repository
-            Categories = cat.GetAll();
+            Categories = new CategoryRepository().GetAll();
             
             //Get the products from the repository
-            Products = prod.GetAll();
+            Products = new ProductRepository().GetAll();
             
             Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             if (Cart != null)
             {
                 Total = Cart.Sum(item => item.Product.Price * item.Quantity);
             }
+            
+            return Page();
         }
-        
-        public void OnPost()
-        {
-            var prod = new ProductRepository();
-            var cat = new CategoryRepository();
-            Products = prod.GetAll();
-            Categories = cat.GetAll();
-        }
-        
+
         public IActionResult OnPostPerPersoonBetalen(int productId, string action)
         {
             Cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") ?? new List<Item>();
@@ -107,7 +97,7 @@ namespace NHLCafe.Pages
             return Page();
         }
 
-        public IActionResult OnPostBuy([FromForm] int productId)
+        public IActionResult OnPostAdd([FromForm] int productId)
         {
             ModifyCart(productId, "add");
             
@@ -115,24 +105,6 @@ namespace NHLCafe.Pages
             return RedirectToPage("/Order");
         }
 
-        public IActionResult OnPostMinus([FromForm] int productId)
-        {
-            ModifyCart(productId, "remove");
-            
-            CalculateTotal();
-
-            return new RedirectResult("/Order");
-        }
-        
-        public IActionResult OnPostPlus([FromForm] int productId)
-        {
-            ModifyCart(ProductId, "add");
-
-            CalculateTotal();
-            
-            return new RedirectResult("/Order");
-        }
-        
         public IActionResult OnPostRemove([FromForm] int productId)
         {
             ModifyCart(productId, "remove");

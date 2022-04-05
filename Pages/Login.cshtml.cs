@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NHLCafe.Pages.Models;
 using NHLCafe.Pages.Repository;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,9 +24,9 @@ namespace NHLCafe.Pages
             if (ModelState.IsValid)
             {
                 var res = user.Auth(UserName, Password).ToList();
-                if (res[0].auth)
+                if (res[0].Auth)
                 {
-                    HttpContext.Session.SetInt32("session", res[0].userid);
+                    HttpContext.Session.SetInt32("session", res[0].Userid);
                     return RedirectToPage("/Auth/AccountOverview");
                 }
                 else

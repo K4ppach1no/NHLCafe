@@ -1,5 +1,4 @@
 using System.Data;
-using Microsoft.Data.SqlClient;
 using Dapper;
 using MySql.Data.MySqlClient;
 using NHLCafe.Pages.Models;
@@ -20,60 +19,48 @@ public class CategoryRepository
     // get all categories in a list
     public List<Category> GetAll()
     {
-        using (IDbConnection dbConnection = Connect())
-        {
-            return dbConnection.Query<Category>("SELECT * FROM category").ToList();
-        }
+        using IDbConnection dbConnection = Connect();
+        return dbConnection.Query<Category>("SELECT * FROM category").ToList();
     }
     
     // get a category by id
-    public Category GetById(int id)
+    public Category? GetById(int id)
     {
-        using (IDbConnection dbConnection = Connect())
-        {
-            string sQuery = "SELECT * FROM category WHERE CategoryId = @Id";
-            return dbConnection.Query<Category>(sQuery, new { Id = id }).FirstOrDefault();
-        }
+        using IDbConnection dbConnection = Connect();
+        string sQuery = "SELECT * FROM category WHERE CategoryId = @Id";
+        return dbConnection.Query<Category>(sQuery, new { Id = id }).FirstOrDefault();
     }
     
     // get a category by name
-    public Category GetByName(string name)
+    public Category? GetByName(string name)
     {
-        using (IDbConnection dbConnection = Connect())
-        {
-            string sQuery = "SELECT * FROM category WHERE Name = @Name";
-            return dbConnection.Query<Category>(sQuery, new { Name = name }).FirstOrDefault();
-        }
+        using IDbConnection dbConnection = Connect();
+        string sQuery = "SELECT * FROM category WHERE Name = @Name";
+        return dbConnection.Query<Category>(sQuery, new { Name = name }).FirstOrDefault();
     }
     
     // delete a category by id
     public void Delete(int id)
     {
-        using (IDbConnection dbConnection = Connect())
-        {
-            string sQuery = "DELETE FROM category WHERE CategoryId = @Id";
-            dbConnection.Execute(sQuery, new { Id = id });
-        }
+        using IDbConnection dbConnection = Connect();
+        string sQuery = "DELETE FROM category WHERE CategoryId = @Id";
+        dbConnection.Execute(sQuery, new { Id = id });
     }
     
     // add a new category
-    public bool Add(string Name)
+    public bool Add(string name)
     {
-        using (IDbConnection dbConnection = Connect())
-        {
-            string sQuery = "INSERT INTO category (Name) VALUES(@Name)";
-            dbConnection.Execute(sQuery, new { Name = Name });
-            return true;
-        }
+        using IDbConnection dbConnection = Connect();
+        string sQuery = "INSERT INTO category (Name) VALUES(@Name)";
+        dbConnection.Execute(sQuery, new { Name = name });
+        return true;
     }
 
     // update a category
-    public void Update(string Name, int Id)
+    public void Update(string name, int id)
     {
-        using (IDbConnection dbConnection = Connect())
-        {
-            string sQuery = "UPDATE category SET Name = @Name WHERE CategoryId = @Id";
-            dbConnection.Execute(sQuery, new { Name = Name, Id = Id });
-        }
+        using IDbConnection dbConnection = Connect();
+        string sQuery = "UPDATE category SET Name = @Name WHERE CategoryId = @Id";
+        dbConnection.Execute(sQuery, new { Name = name, Id = id });
     }
 }

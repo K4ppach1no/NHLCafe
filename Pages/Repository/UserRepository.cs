@@ -17,50 +17,49 @@ namespace NHLCafe.Pages.Repository
         }
 
         // get cafeuser by id
-        public CafeUser GetById(int UserId)
+        public CafeUser? GetById(int userId)
         {
             using (IDbConnection db = Connect())
             {
-                return db.Query<CafeUser>("SELECT * FROM user WHERE UserId = @UserId", new { UserId }).FirstOrDefault();
+                return db.Query<CafeUser>("SELECT * FROM user WHERE UserId = @UserId", new {UserId = userId }).FirstOrDefault();
             }
         }
 
         public void AddUser(string username, string password)
         {
             using var connection = Connect();
-            var users = connection
+            connection
                 .Query("INSERT INTO user (username, password) VALUES (@username,@password)",
                     new
                     {
-                        username = username,
+                        username,
                         password = BCrypt.Net.BCrypt.HashPassword(password),
                     });
-            return;
         }
 
-        public List<authresult> Auth(string username, string password)
+        public List<Authresult> Auth(string username, string password)
         {
             using var connection = Connect();
             var user = connection
                 .QuerySingleOrDefault("SELECT * FROM user WHERE username = @username",
                     new
                     {
-                        username = username
+                        username
                     });
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user?.Password))
             {
-                return new List<authresult> { new authresult { auth = true, userid = user?.UserId } };
+                return new List<Authresult> { new Authresult { Auth = true, Userid = user?.UserId } };
             }
             else
             {
-                return new List<authresult> { new authresult { auth = false } };
+                return new List<Authresult> { new Authresult { Auth = false } };
             }
         }
     }
 }
 
-public class authresult
+public class Authresult
 {
-    public bool auth { get; set; }
-    public int userid { get; set; }
+    public bool Auth { get; set; }
+    public int Userid { get; set; }
 }

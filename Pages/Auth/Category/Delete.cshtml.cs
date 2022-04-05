@@ -6,14 +6,14 @@ namespace NHLCafe.Pages.Auth.Category;
 
 public class Delete : PageModel
 {
-    public IActionResult OnGet([FromQuery]int CategoryId)
+    public IActionResult OnGet([FromQuery]int categoryId)
     {
-        if (HttpContext.Session.GetString("session") == null || CategoryId == 0)
+        if (HttpContext.Session.GetString("session") == null || categoryId == 0)
             return RedirectToPage("../../Login");
 
         var cat = new CategoryRepository();
-        cat.Delete(CategoryId);
-        return RedirectToPage("/Auth/Product/Index");
+        cat.Delete(categoryId);
+        return RedirectToPage("/Auth/Category/Index");
         
     }
 }

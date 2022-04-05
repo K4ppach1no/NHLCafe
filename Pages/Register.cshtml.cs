@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NHLCafe.Pages.Models;
 using NHLCafe.Pages.Repository;
 using System.ComponentModel.DataAnnotations;
 

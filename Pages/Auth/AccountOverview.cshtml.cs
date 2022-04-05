@@ -6,7 +6,7 @@ namespace NHLCafe.Pages
 {
     public class AccountOverviewModel : PageModel
     {
-        [BindProperty] public string Username { get; set; } = "";
+        [BindProperty] public string Username { get; private set; } = "";
 
         public IActionResult OnGet()
         {
@@ -16,7 +16,7 @@ namespace NHLCafe.Pages
             {
                 var user = new UserRepository();
 
-                Username = user.GetById(((int)HttpContext.Session.GetInt32("session"))!).UserName;
+                Username = user.GetById((int)HttpContext.Session.GetInt32("session")).UserName;
                 return Page();
             }
         }

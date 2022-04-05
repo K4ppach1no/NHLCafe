@@ -10,13 +10,21 @@
   <component name="ChangeListManager">
     <list default="true" id="bea0d0e1-3de7-4953-b5d9-7fbdbd3d1aac" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.NHLCafe/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.NHLCafe/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/Auth/Category/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Category/Edit.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/Auth/Category/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Category/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Auth/AccountOverview.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/AccountOverview.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Auth/Category/Delete.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Category/Delete.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Auth/Category/Edit.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Category/Edit.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Auth/Category/Index.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Category/Index.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Auth/Product/Delete.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Product/Delete.cshtml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pages/Auth/Product/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Product/Edit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Auth/Product/Edit.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Product/Edit.cshtml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pages/Auth/Product/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Product/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/Order.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Order.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/Order.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Order.cshtml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pages/Privacy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Privacy.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Auth/Product/Index.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Product/Index.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Index.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Index.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Order.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Order.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Order.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Auth/Order.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Repository/CategoryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Repository/CategoryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Repository/ProductRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Repository/ProductRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Shared/_Layout.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,11 +40,15 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1f18529517a1d3c051def436a4696cc374fd1877837b7e6cd9efc464122ef341/AsyncMethodBuilderCore.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1ac3bf8d279e4572a77c8002c0c830f1171c00/e0/be7f3209/MySqlConnection.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/333717bd1cce3876d133e8e23428a3dca892c18641b7eb745fe17d1eed102cbc/ExecutorFactory.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1ac3bf8d279e4572a77c8002c0c830f1171c00/8e/a3383b62/MySqlCommand.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="273jZ0cZcRvHbHLQahdhOaPBYgA" />
   <component name="ProjectViewState">
@@ -98,6 +110,7 @@
       <workItem from="1648555727002" duration="29000" />
       <workItem from="1648555780036" duration="120000" />
       <workItem from="1649194284410" duration="2240000" />
+      <workItem from="1649196879602" duration="4407000" />
     </task>
     <servers />
   </component>
@@ -107,27 +120,18 @@
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Pages/Auth/Product/Index.cshtml</url>
-          <line>8</line>
-          <properties documentPath="C:\Users\tghee\RiderProjects\NHLCafe\Pages\Auth\Product\Index.cshtml" initialLine="8" isMultiMethodBreakpoint="true">
-            <option name="multiMethodBreakpoint" value="true" />
-            <startOffsets>
-              <option value="-1" />
-            </startOffsets>
-            <endOffsets>
-              <option value="-1" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

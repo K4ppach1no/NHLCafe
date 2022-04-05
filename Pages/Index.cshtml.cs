@@ -9,6 +9,6 @@ public class IndexModel : PageModel
     public IActionResult OnGet()
     {
         //redirect to order page
-        return RedirectToPage("/Order");
+        return RedirectToPage("/Auth/Order");
     }
 }
