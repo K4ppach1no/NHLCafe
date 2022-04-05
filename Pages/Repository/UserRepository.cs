@@ -16,15 +16,6 @@ namespace NHLCafe.Pages.Repository
             );
         }
 
-        // get all cafeusers
-        public IEnumerable<CafeUser> GetAll()
-        {
-            using (IDbConnection db = Connect())
-            {
-                return db.Query<CafeUser>("SELECT * FROM user");
-            }
-        }
-        
         // get cafeuser by id
         public CafeUser GetById(int UserId)
         {
@@ -56,9 +47,9 @@ namespace NHLCafe.Pages.Repository
                     {
                         username = username
                     });
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user?.password))
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user?.Password))
             {
-                return new List<authresult> { new authresult { auth = true, userid = user?.id } };
+                return new List<authresult> { new authresult { auth = true, userid = user?.UserId } };
             }
             else
             {

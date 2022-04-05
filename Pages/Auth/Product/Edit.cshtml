@@ -1,0 +1,48 @@
+@page
+@model NHLCafe.Pages.Auth.Product.Edit
+
+@{
+    
+}
+
+@* Edit page for a product*@
+<div class="container border" style="padding:20px">
+    <form method="post">
+        <div class="form-group row">
+            <div class="col-5">
+                <input type="text" name="ProductName" class="form-control" value="@Model.Product.Name" style="margin-bottom: 10px"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-5">
+                <select name="CategoryId" class="form-control" style="margin-bottom: 10px">
+                    @foreach (var cat in Model.Categories)
+                    {
+                        @if (cat.CategoryId == Model.Product.CategoryId)
+                        {
+                            <option value="@cat.CategoryId" selected>@cat.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@cat.CategoryId">@cat.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-5">
+                <input type="text" name="Price" class="form-control" value="@Model.Product.Price" style="margin-bottom: 10px"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <input type="submit" class="btn btn-primary" value="Edit"/>
+            </div>
+            <div class="col-5">
+                <label class="text-danger">@Model.Msg</label>
+            </div>
+        </div>
+    </form>
+</div>

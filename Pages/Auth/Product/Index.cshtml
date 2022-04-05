@@ -1,0 +1,61 @@
+@page
+@model NHLCafe.Pages.Auth.Product.Index
+
+<div class="container border" style="padding:20px">
+    <form method="post">
+        <div class="form-group row">
+            <div class="col-5">
+                <input type="text" name="ProductName" class="form-control" style="margin-bottom: 10px"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-5">
+                <select name="CategoryId" class="form-control" style="margin-bottom: 10px">
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <option value="@cat.CategoryId">@cat.Name</option>
+                    }
+                </select>
+            </div>
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-5">
+                <input type="text" name="Price" class="form-control" value="0" style="margin-bottom: 10px"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <input type="submit" class="btn btn-primary" value="Add"/>
+            </div>
+            <div class="col-5">
+                <label class="text-danger">@Model.Msg</label>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="container border" style="padding:20px">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var prod in Model.Products)
+        {
+            <tr>
+                <td>@prod.Name</td>
+                <td>@(Model.Categories.FirstOrDefault(x => x.CategoryId == prod.CategoryId).Name)</td>
+                <td>@prod.Price.ToString("0.00")</td>
+                <td>
+                    <a href="/auth/Product/Edit?ProductId=@prod.ProductId" class="btn btn-primary" style="margin-right: 10px">Edit</a>
+                    <a href="/auth/Product/Delete?ProductId=@prod.ProductId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

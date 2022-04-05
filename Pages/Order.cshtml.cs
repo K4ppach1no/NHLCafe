@@ -13,6 +13,7 @@ namespace NHLCafe.Pages
         public List<Item>? Cart { get; set; }
         public List<Item>? PerPersoonBetalen { get; set; }
         public double Total { get; set; }
+        public int ActiveTab { get; set; } = 1;
         
         [BindProperty] public int ProductId { get; set; }
         
@@ -22,6 +23,7 @@ namespace NHLCafe.Pages
             var cat = new CategoryRepository();
             // create a new instance of the repository
             var prod = new ProductRepository();
+            
                 
             //Get the categories from the repository
             Categories = cat.GetAll();

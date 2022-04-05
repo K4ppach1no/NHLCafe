@@ -36,25 +36,25 @@ public class ProductRepository
     }
     
     // add product
-    public void Add(Product product)
+    public void Add(string Name, int CategoryId, double Price)
     {
         using (IDbConnection dbConnection = Connect())
         {
             string sQuery = "INSERT INTO product (Name, CategoryId, Price) VALUES(@Name, @CategoryId, @Price)";
-            dbConnection.Execute(sQuery, product);
+            dbConnection.Execute(sQuery, new { Name, CategoryId, Price });
         }
     }
 
     // update product
-    public void Update(Product product)
+    public void Update(int ProductId, string Name, int CategoryId, double Price)
     {
         using (IDbConnection dbConnection = Connect())
         {
             string sQuery = "UPDATE product SET Name = @Name, CategoryId = @CategoryId, Price = @Price WHERE ProductId = @ProductId";
-            dbConnection.Execute(sQuery, product);
+            dbConnection.Execute(sQuery, new { ProductId, Name, CategoryId, Price });
         }
     }
-    
+
     // delete product
     public void Delete(int ProductId)
     {

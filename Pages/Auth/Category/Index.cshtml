@@ -1,0 +1,42 @@
+@page
+@model NHLCafe.Pages.Auth.Category.Index
+
+<div class="container border" style="padding:20px">
+    <form method="post">
+        <div class="form-group row">
+            <div class="col-5">
+                <input type="text" name="Name" class="form-control" style="margin-bottom: 10px"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <input type="submit" class="btn btn-primary" value="Add"/>
+            </div>
+            <div class="col-5">
+                <label class="text-danger">@Model.Msg</label>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container border" style="padding:20px">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Category Name</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var cat in Model.Categories)
+        {
+            <tr>
+                <td>@cat.Name</td>
+                <td>
+                    <a href="/auth/Category/Edit?CategoryId=@cat.CategoryId" class="btn btn-primary" style="margin-right: 10px">Edit</a>
+                    <a href="/auth/Category/Delete?CategoryId=@cat.CategoryId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
