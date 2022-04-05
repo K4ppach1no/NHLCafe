@@ -193,7 +193,7 @@
   </table>
   @* Button on the bottom right side to pay *@
   <form method="post" asp-page-handler="pay">
-    <button class="btn btn-primary" style="float: right">Betalen</button>
+    <button class="btn btn-primary" style="float: right; margin: 25px">Betalen</button>
   </form>
 </div>
   
@@ -231,7 +231,7 @@
             <span style="margin-left: 10px; margin-right: 10px; float: left">van @orderItem.Quantity</span>
           </td>
           <td>@($"{orderItem.Product.Price:n2}")</td>
-          <td>@($"{orderItem.Product.Price * @orderItem.Quantity:n2}")</td>
+          <td>@($"{orderItem.Product.Price * @Model.GetQuantity(orderItem.Product.ProductId):n2}")</td>
         </tr>
       }
     }
@@ -239,25 +239,21 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>@($"{Model.Total:n2}")</td>
+      <td>@($"{Model.GetTotalPerPersoon():n2}")</td>
     </tr>
     </tbody>
   </table>
   @* Pay button in the bottom right corner *@
-  <div class="row">
-    <div class="col-md-12">
-      <form  method="post" asp-page-handler="PerpersoonBetalen">
-        <input type="hidden" name="ProductID" value="0"/>
-        <input type="hidden" name="Action" value="Pay"/>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Betalen</button>
-      </form>
-    </div>
-  </div>
+  <form  method="post" asp-page-handler="PerpersoonBetalen">
+    <input type="hidden" name="ProductID" value="0"/>
+    <input type="hidden" name="Action" value="Pay"/>
+    <button class="btn btn-primary" style="float: right; margin: 25px">Betalen</button>
+  </form>
 </div>
 </div>
 @* Select table nr *@
 <div class="row" style="margin: 20px">
-  <div class="col-md-12">
+  <div class="col-md-3" style="float: left">
     <label for="TableNr">Tafel nummer</label>
     <select class="form-control" id="TableNr" name="TableNr">
       @if (Model != null && Model.Tafels != null)

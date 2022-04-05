@@ -238,6 +238,17 @@ namespace NHLCafe.Pages
             if (index == -1) return 0;
             return cart[index].Quantity;
         }
+
+        public double GetTotalPerPersoon()
+        {
+            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "perpersoonbetalen");
+            if (cart == null) return 0;
+            return cart.Sum(item =>
+            {
+                if (item.Product != null) return item.Product.Price * item.Quantity;
+                return 0;
+            });
+        }
         
     }
 }
