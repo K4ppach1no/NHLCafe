@@ -40,127 +40,127 @@
 @* Bestellen *@
 <div id="Order" class="tab-pane show active">
     
-    <h2>Bestellen</h2>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-3">
-          <div class="list-group" id="list-tab" role="tablist">
-            @foreach (Category category in Model.Categories)
-            {
-              <button class="list-group-item list-group-item-action" id="@category.Name.Replace(" ", "-")-tab" data-bs-toggle="list" data-bs-target="#@category.Name.Replace(" ", "-")" type="button" role="tab" aria-controls="@category.Name.Replace(" ", "-")" aria-selected="false">@category.Name</button>
-            }
-          </div>
-        </div>
-        <div class="tab-content col-sm-3" id="nav-tabContent">
+  <h2>Bestellen</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="list-group" id="list-tab" role="tablist">
           @foreach (Category category in Model.Categories)
           {
-            <div class="tab-pane list-group fade" id="@category.Name.Replace(" ", "-")" role="tabpanel" aria-labelledby="@category.Name.Replace(" ", "-")-tab">
-              @foreach (Product product in Model.Products.Where(p => p.CategoryId == category.CategoryId))
-              {
-                <a class="list-group-item d-flex justify-content-between align-items-center" style="width: available">
-                  @product.Name
-                  <form method="post" asp-page-handler="buy">
-                    <input type="hidden" name="productId" value="@product.ProductId" />
-                    <button class="AddCart btn badge bg-primary rounded-pill">+</button>
-                  </form>
-                </a>
-              }
-            </div>
+            <button class="list-group-item list-group-item-action" id="@category.Name.Replace(" ", "-")-tab" data-bs-toggle="list" data-bs-target="#@category.Name.Replace(" ", "-")" type="button" role="tab" aria-controls="@category.Name.Replace(" ", "-")" aria-selected="false">@category.Name</button>
           }
         </div>
-        <div class="col-md-6">
-          @* Order details *@
-          <table class="table table-hover table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Product</th>
-              <th scope="col">Aantal</th>
-              <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            @if (Model != null && Model.Cart != null)
+      </div>
+      <div class="tab-content col-sm-3" id="nav-tabContent">
+        @foreach (Category category in Model.Categories)
+        {
+          <div class="tab-pane list-group fade" id="@category.Name.Replace(" ", "-")" role="tabpanel" aria-labelledby="@category.Name.Replace(" ", "-")-tab">
+            @foreach (Product product in Model.Products.Where(p => p.CategoryId == category.CategoryId))
             {
-              foreach (var orderItem in Model.Cart)
-              {
-                <tr>
-                  <td>@orderItem.Product.Name</td>
-                  <td>
-                    <form method="post" asp-page-handler="minus">
-                      <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                      <button class="btn badge bg-primary rounded-pill" style="float: left">-</button>
-                    </form>
-                    <span style="margin-left: 10px; margin-right: 10px; float: left">@orderItem.Quantity</span>
-                    <form method="post" asp-page-handler="plus">
-                      <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                      <button class="btn badge bg-primary rounded-pill" style="float: left">+</button>
-                    </form>
-                  </td>
-                  @* remove product *@
-                  <td>
-                    <form method="post" asp-page-handler="remove">
-                      <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                      <button class="btn badge bg-primary rounded-pill" style="float: left">X</button>
-                    </form>
-                  </td>
-                </tr>
-              }
+              <a class="list-group-item d-flex justify-content-between align-items-center" style="width: available">
+                @product.Name
+                <form method="post" asp-page-handler="buy">
+                  <input type="hidden" name="productId" value="@product.ProductId" />
+                  <button class="AddCart btn badge bg-primary rounded-pill">+</button>
+                </form>
+              </a>
             }
-            </tbody>
-          </table>
-        </div>
+          </div>
+        }
+      </div>
+      <div class="col-md-6">
+        @* Order details *@
+        <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Aantal</th>
+            <th scope="col"></th>
+          </tr>
+          </thead>
+          <tbody>
+          @if (Model != null && Model.Cart != null)
+          {
+            foreach (var orderItem in Model.Cart)
+            {
+              <tr>
+                <td>@orderItem.Product.Name</td>
+                <td>
+                  <form method="post" asp-page-handler="minus">
+                    <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+                    <button class="btn badge bg-primary rounded-pill" style="float: left">-</button>
+                  </form>
+                  <span style="margin-left: 10px; margin-right: 10px; float: left">@orderItem.Quantity</span>
+                  <form method="post" asp-page-handler="plus">
+                    <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+                    <button class="btn badge bg-primary rounded-pill" style="float: left">+</button>
+                  </form>
+                </td>
+                @* remove product *@
+                <td>
+                  <form method="post" asp-page-handler="remove">
+                    <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+                    <button class="btn badge bg-primary rounded-pill" style="float: left">X</button>
+                  </form>
+                </td>
+              </tr>
+            }
+          }
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>
 
 @* Overzicht *@
 <div class="tab-pane fade" id="Overview">
-    <h2>Overzicht</h2>
-    <table class="table table-hover table-striped">
-      <thead>
-      <tr>
-        <th scope="col">Product</th>
-        <th scope="col">Aantal</th>
-        <th scope="col">Prijs</th>
-        <th scope="col">Totaal</th>
-      </tr>
-      </thead>
-      <tbody>
-      @if (Model != null && Model.Cart != null)
+  <h2>Overzicht</h2>
+  <table class="table table-hover table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col">Aantal</th>
+      <th scope="col">Prijs</th>
+      <th scope="col">Totaal</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Cart != null)
+    {
+      foreach (var orderItem in Model.Cart)
       {
-        foreach (var orderItem in Model.Cart)
-        {
-          <tr>
-            <td>@orderItem.Product.Name</td>
-            <td>
-              <form method="post" asp-page-handler="minus">
-                <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                <button class="btn badge bg-primary rounded-pill" style="float: left">-</button>
-              </form>
-              <span style="margin-left: 10px; margin-right: 10px; float: left">@orderItem.Quantity</span>
-              <form method="post" asp-page-handler="plus">
-                <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                <button class="btn badge bg-primary rounded-pill" style="float: left">+</button>
-              </form>
-            </td>
-            <td>@($"{orderItem.Product.Price:n2}")</td>
-            <td>@($"{orderItem.Product.Price * @orderItem.Quantity:n2}")</td>
-          </tr>
-        }
+        <tr>
+          <td>@orderItem.Product.Name</td>
+          <td>
+            <form method="post" asp-page-handler="minus">
+              <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+              <button class="btn badge bg-primary rounded-pill" style="float: left">-</button>
+            </form>
+            <span style="margin-left: 10px; margin-right: 10px; float: left">@orderItem.Quantity</span>
+            <form method="post" asp-page-handler="plus">
+              <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+              <button class="btn badge bg-primary rounded-pill" style="float: left">+</button>
+            </form>
+          </td>
+          <td>@($"{orderItem.Product.Price:n2}")</td>
+          <td>@($"{orderItem.Product.Price * @orderItem.Quantity:n2}")</td>
+        </tr>
       }
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>@($"{Model.Total:n2}")</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    }
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>@($"{Model.Total:n2}")</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
   
 @* Alles betalen*@
 <div class="tab-pane fade" id="Pay">
-    <h2>Rekening</h2>
+  <h2>Rekening</h2>
   <table class="table table-hover table-striped">
     <thead>
     <tr>
@@ -199,59 +199,75 @@
   
 @* Per persoon betalen*@
 <div class="tab-pane fade" id="PayPerPerson">
-    <h2>Per persoon betalen</h2>
-    <table class="table table-hover table-striped">
-        <thead>
+  <h2>Per persoon betalen</h2>
+  <table class="table table-hover table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col">Nog te betalen</th>
+      <th scope="col">Prijs</th>
+      <th scope="col">Totaal</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Cart != null)
+    {
+      foreach (var orderItem in Model.Cart)
+      {
         <tr>
-            <th scope="col">Product</th>
-            <th scope="col">Nog te betalen</th>
-            <th scope="col">Prijs</th>
-            <th scope="col">Totaal</th>
+          <td>@orderItem.Product?.Name</td>
+          <td>
+            <form method="post" asp-page-handler="PerpersoonBetalen">
+              <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+              <input type="hidden" name="Action" value="Remove"/>
+              <button id="Remove" class="btn badge bg-primary rounded-pill" style="float: left">-</button>
+            </form>
+            <span id="ItemQuantity" style="margin-left: 10px; margin-right: 10px; float: left">@Model.GetQuantity(orderItem.Product.ProductId)</span>
+            <form method="post" asp-page-handler="PerpersoonBetalen">
+              <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
+              <input type="hidden" name="Action" value="Add"/>
+              <button id="Add" class="btn badge bg-primary rounded-pill" style="float: left">+</button>
+            </form>
+            <span style="margin-left: 10px; margin-right: 10px; float: left">van @orderItem.Quantity</span>
+          </td>
+          <td>@($"{orderItem.Product.Price:n2}")</td>
+          <td>@($"{orderItem.Product.Price * @orderItem.Quantity:n2}")</td>
         </tr>
-        </thead>
-        <tbody>
-        @if (Model != null && Model.Cart != null)
-        {
-            foreach (var orderItem in Model.Cart)
-            {
-                <tr>
-                    <td>@orderItem.Product?.Name</td>
-                    <td>
-                        <form method="post" asp-page-handler="PerpersoonBetalen">
-                            <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                            <input type="hidden" name="Action" value="Remove"/>
-                            <button id="Remove" class="btn badge bg-primary rounded-pill" style="float: left">-</button>
-                        </form>
-                        <span id="ItemQuantity" style="margin-left: 10px; margin-right: 10px; float: left">@Model.GetQuantity(orderItem.Product.ProductId)</span>
-                        <form method="post" asp-page-handler="PerpersoonBetalen">
-                            <input type="hidden" name="productId" value="@orderItem.Product.ProductId"/>
-                            <input type="hidden" name="Action" value="Add"/>
-                            <button id="Add" class="btn badge bg-primary rounded-pill" style="float: left">+</button>
-                        </form>
-                        <span style="margin-left: 10px; margin-right: 10px; float: left">van @orderItem.Quantity</span>
-                    </td>
-                    <td>@($"{orderItem.Product.Price:n2}")</td>
-                    <td>@($"{orderItem.Product.Price * @orderItem.Quantity:n2}")</td>
-                </tr>
-            }
-        }
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>@($"{Model.Total:n2}")</td>
-        </tr>
-        </tbody>
-    </table>
-    @* Pay button in the bottom right corner *@
-    <div class="row">
-        <div class="col-md-12">
-          <form  method="post" asp-page-handler="PerpersoonBetalen">
-            <input type="hidden" name="ProductID" value="0"/>
-            <input type="hidden" name="Action" value="Pay"/>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Betalen</button>
-          </form>
-        </div>
+      }
+    }
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>@($"{Model.Total:n2}")</td>
+    </tr>
+    </tbody>
+  </table>
+  @* Pay button in the bottom right corner *@
+  <div class="row">
+    <div class="col-md-12">
+      <form  method="post" asp-page-handler="PerpersoonBetalen">
+        <input type="hidden" name="ProductID" value="0"/>
+        <input type="hidden" name="Action" value="Pay"/>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Betalen</button>
+      </form>
     </div>
   </div>
 </div>
+</div>
+@* Select table nr *@
+<div class="row" style="margin: 20px">
+  <div class="col-md-12">
+    <label for="TableNr">Tafel nummer</label>
+    <select class="form-control" id="TableNr" name="TableNr">
+      @if (Model != null && Model.Tafels != null)
+      {
+        foreach (var table in Model.Tafels)
+        {
+          <option value="@table">@table</option>
+        }
+      }
+    </select>
+  </div>
+</div>
+

@@ -13,7 +13,9 @@ namespace NHLCafe.Pages
         public List<Item>? Cart { get; set; }
         public List<Item>? PerPersoonBetalen { get; set; }
         public double Total { get; set; }
-        public int ActiveTab { get; set; } = 1;
+        public List<int> Tafels { get; set; } = new List<int>() {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        
+        [BindProperty] public int TableNr { get; set; }
         
         [BindProperty] public int ProductId { get; set; }
         
@@ -105,11 +107,12 @@ namespace NHLCafe.Pages
             return Page();
         }
 
-        public void OnPostBuy([FromForm] int productId)
+        public IActionResult OnPostBuy([FromForm] int productId)
         {
             ModifyCart(productId, "add");
             
             CalculateTotal();
+            return RedirectToPage("/Order");
         }
 
         public IActionResult OnPostMinus([FromForm] int productId)
